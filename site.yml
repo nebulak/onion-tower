@@ -1,0 +1,54 @@
+---
+
+- hosts: localhost
+  user: root
+  become: True
+  roles:
+    - { role: systemli.hidden-service }
+    - { role: rock5gmbh.dbserver }
+    - { role: rock5gmbh.ssl }
+  vars:
+    # configuration for hidden-services-role
+    hidden_service_active: True
+    hidden_service_ipaddr: 127.0.0.1
+    hidden_service_tor_apt_state: present
+    hidden_service_services:
+      ssh:
+        hidden_service_hostname:
+        hidden_service_ports:
+          - [22, 22]
+        hidden_service_authorized_clients: []
+        hidden_service_private_key:
+      main:
+        hidden_service_hostname:
+        hidden_service_ports:
+          # mailserver ports
+          - [25, 25]
+          - [465, 465]
+          - [587, 587]
+          - [993, 993]
+          # xmpp ports
+          - [5222, 5222]
+          - [5269, 5269]
+        hidden_service_authorized_clients: []
+        hidden_service_private_key:
+
+    hidden_services_configuration:
+      SocksPort: 9050
+      SocksPolicy: "reject *"
+
+    # List of auth cookies for connecting to Authenticated Tor Hidden Services.
+    #
+    hidden_service_hid_serv_auth: []
+
+    hidden_service_monit_enabled: False
+
+    # dbserver configuration
+    dbserver_root_pw: "12345678"
+    dbserver_mariadb: True
+
+    # ssl configuration
+    # //TODO:
+    # postfix
+    # dovecot
+    # 
